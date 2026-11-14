@@ -1,0 +1,15 @@
+name: Check token
+# Reads the account's username with the token. Posts nothing.
+on: workflow_dispatch
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          for host in graph.facebook.com graph.instagram.com; do
+            echo "== $host"
+            curl -s "https://$host/v27.0/17841458894672279?fields=username,media_count&access_token=$IG_TOKEN" | sed 's/"access_token[^,]*//'
+            echo
+          done
+        env:
+          IG_TOKEN: ${{ secrets.IG_TOKEN_MIFFU }}
