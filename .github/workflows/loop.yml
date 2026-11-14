@@ -3,8 +3,8 @@ name: Post loop
 # GitHub's own cron is unreliable, so the cron below is only a backup to restart the chain.
 on:
   workflow_dispatch:
-  # schedule:            # switched on after GM approves the first reels
-  #   - cron: "41 */3 * * *"
+  schedule:
+    - cron: "41 */3 * * *"
 permissions:
   contents: write
   actions: write

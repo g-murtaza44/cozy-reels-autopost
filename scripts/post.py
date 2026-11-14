@@ -20,19 +20,22 @@ def call(method, path, params, fatal=True):
         if fatal: sys.exit(1)
         raise RuntimeError(msg)
 
-def pick_audio(mood):
-    if mood in ("", "none"): return None
+def _find(query):
     p = {"audio_type": "music", "user_id": IGID}
-    if mood: p["search_query"] = mood
+    if query: p["search_query"] = query
     try:
         res = call("GET", "ig_audio", p, fatal=False)
     except Exception as e:
-        print("Audio search failed, posting with the reel's own sound:", e); return None
-    items = res.get("data") or res.get("audio") or []
-    if not items and mood:
-        res = call("GET", "ig_audio", {"audio_type": "music", "user_id": IGID}); items = res.get("data") or res.get("audio") or []
+        print("Audio lookup failed:", str(e)[:200]); return []
+    return res.get("data") or res.get("audio") or []
+
+def pick_audio(mood):
+    if mood in ("", "none"): return None
+    items = _find(None) if mood == "trending" else _find(mood)   # no query = Instagram's trending list
+    if not items: items = _find("lofi")
+    if not items: items = _find(None)
     if not items:
-        print("No audio found, posting with the reel's own sound", str(res)[:300]); return None
+        print("No audio found, posting with the reel's own sound"); return None
     a = items[0]
     print("Audio:", a.get("title"), "-", a.get("display_artist") or a.get("artist"))
     return a.get("audio_id") or a.get("id")
