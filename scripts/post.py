@@ -57,7 +57,7 @@ def post(folder):
 
 from datetime import datetime, timedelta, timezone
 PKT = timezone(timedelta(hours=5))
-SLOTS = [(13,17),(20,17)]  # Pakistan time
+SLOTS = [(5,20),(13,17),(20,17)]  # Pakistan time
 
 def log_entries():
     out = []

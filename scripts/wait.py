@@ -1,7 +1,7 @@
 # Sleeps until the next posting slot (PKT), at most 5.5 hours. Prints "post" if a slot was reached.
 import time
 from datetime import datetime, timedelta, timezone
-PKT = timezone(timedelta(hours=5)); SLOTS = [(13,17),(20,17)]
+PKT = timezone(timedelta(hours=5)); SLOTS = [(5,20),(13,17),(20,17)]
 now = datetime.now(PKT)
 cands = [now.replace(hour=h, minute=m, second=0, microsecond=0) + timedelta(days=d) for d in (0,1) for h, m in SLOTS]
 nxt = min(t for t in cands if t > now)
